@@ -1,0 +1,40 @@
+<ion-card class="full-height-card">
+  <ion-grid class="full-height-grid">
+
+    <ion-row class="work-segment-name">
+      <ion-col>
+        <app-work-segment-name [workSegmentName]="workSegmentName" (inputBlur)="handleInputBlur($event)"></app-work-segment-name>
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="time-type-selection">
+      <ion-col>
+        <app-select [selectValidity]="selectValidity" [modes]="modes" [selectedMode]="selectedMode" (ionChange)="selectOption($event)"></app-select>
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="time">
+      <ion-col>
+        <app-time-value 
+        (timeValueChange)="handleTimeValueChange($event)"
+        [wasStarted]="wasStarted"
+        [timeValue]="timeValue" 
+        [selectedMode]="selectedMode"></app-time-value>
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="tags">
+      <app-tags [selectedTags]="selectedTags" [tags]="tags" (tagsUpdated)="updateSelectedTags($event)"></app-tags>
+    </ion-row>
+
+    <ion-row class="buttons ion-align-items-center ion-justify-content-center">
+      <app-generic-button [buttonType]="'start'" (buttonClick)="handleStart()" [validity]="startValidity"></app-generic-button>
+      <app-generic-button [buttonType]="'stop'" (buttonClick)="handleStop()" [validity]="stopValidity"></app-generic-button>
+      <app-generic-button [buttonType]="'save'" (buttonClick)="handleSave()" [validity]="saveValidity"></app-generic-button>
+    </ion-row>
+
+    <ion-row class="tags-button buttons ion-align-items-center ion-justify-content-center">
+      <ion-icon (click)="displayWorkSegmentList()" size="large" name="pricetags-outline"></ion-icon>
+    </ion-row>
+  </ion-grid>
+</ion-card>

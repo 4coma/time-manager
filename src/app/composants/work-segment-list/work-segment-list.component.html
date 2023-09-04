@@ -1,0 +1,16 @@
+<div style="max-height: 85vh; overflow-y: auto; font-size: 0.85em;">
+  <div *ngFor="let workSegment of workSegments">
+    <div>
+      <strong>Label :</strong> {{ workSegment.label }}
+    </div>
+    <div>
+      <strong>Date :</strong> {{ workSegment.date | date:'dd/MM/yyyy' }}
+    </div>
+    <div>
+      <strong>Durée :</strong> {{ workSegment.duration | timeFormat }}
+    </div>
+    <hr />
+  </div>
+</div>
+
+<ion-button (click)="dismissModal()">Fermer</ion-button>

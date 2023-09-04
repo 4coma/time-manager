@@ -1,0 +1,3 @@
+<ion-select [disabled]="!selectValidity" [value]="selectedMode" (ionChange)="onModeChange($event)" interface="popover" interfaceOptions="{backdropDismiss: false}">
+  <ion-select-option *ngFor="let mode of modes" [value]="mode">{{ mode }}</ion-select-option>
+</ion-select>

@@ -1,0 +1,13 @@
+<div style="font-size: 48px; text-align: center;">
+  <ng-container *ngIf="wasStarted || selectedMode == 'Chrono'; else timerMode">
+    {{ timeValue | timeFormat }}
+  </ng-container>
+
+  <ng-template #timerMode>
+    <input 
+    type="text" 
+    [value]="timerUserValue | timeFormat" 
+    style="font-size: 48px; text-align: center; width: 100%;"
+    (input)="onTimeValueChange($event)"/>
+  </ng-template>
+</div>

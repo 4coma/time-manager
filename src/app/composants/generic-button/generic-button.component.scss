@@ -1,0 +1,12 @@
+ion-button {
+    --background: var(--ion-color-primary);
+    --color: #fff;
+  
+    &.stop {
+      --background: var(--ion-color-warning);
+    }
+  
+    &.end {
+      --background: var(--ion-color-danger);
+    }
+  }
