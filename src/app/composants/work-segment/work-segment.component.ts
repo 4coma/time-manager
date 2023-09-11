@@ -8,6 +8,10 @@ import { TimerService } from 'src/app/services/timer.service';
 import { WorkSegmentService } from 'src/app/services/work-segment.service';
 import { WorkSegmentListComponent } from '../work-segment-list/work-segment-list.component';
 
+import { Plugins } from '@capacitor/core';
+import { Subscription } from 'rxjs';
+const { App, BackgroundTask, LocalNotifications } = Plugins;
+
 @Component({
   selector: 'app-work-segment',
   templateUrl: './work-segment.component.html',
@@ -37,6 +41,8 @@ export class WorkSegmentComponent  implements OnInit {
 
   workSegments: WorkSegment[] = [];
 
+  private subscriptions: Subscription[] = [];
+
   constructor(
     private chronoService: ChronoService,
     private timerService: TimerService,
@@ -57,7 +63,15 @@ export class WorkSegmentComponent  implements OnInit {
     })
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.timerService.getTimerEndObservable().subscribe(() => {
+      this.handleTimerEnd();
+    });
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach(sub => sub.unsubscribe());
+  }
 
   handleTimeValueChange(newValue: string) {
     this.timeValue = this.timerService.convertInputFieldValueToMS(newValue);
@@ -68,6 +82,12 @@ export class WorkSegmentComponent  implements OnInit {
   selectOption(event: any) {
     this.selectedMode = event.detail.value;
     this.checkValidities();
+  }
+
+  handleTimerEnd() {
+    // your logic when the timer reaches zero, for example:
+    this.handleStop();
+    this.showToaster();
   }
 
   handleStart() {  

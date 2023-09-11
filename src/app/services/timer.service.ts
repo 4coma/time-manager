@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { Plugins } from '@capacitor/core';
+const { App, BackgroundTask, LocalNotifications } = Plugins;
 
 @Injectable({
   providedIn: 'root'
@@ -8,6 +10,10 @@ export class TimerService {
 
   private timerValue = new BehaviorSubject<number>(0);
   private intervalId?: number;
+  timerEndObservable = new Subject<void>();
+  
+
+  private backgroundTaskId: any;
 
   constructor() { }
 
@@ -21,22 +27,31 @@ export class TimerService {
     
   }
 
+  getTimerEndObservable() {
+    return this.timerEndObservable.asObservable();
+  }
+
   startTimer(timeInMs: number): void {
 
-    this.clearInterval();
+    this.backgroundTaskId = BackgroundTask['beforeExit'](async () => {
+      this.clearInterval();
 
-    this.intervalId = window.setInterval(() => {
-      let currentValue = this.timerValue.value;
-      if (currentValue > 0) {
-        this.timerValue.next(currentValue - 1000);
-      } else {
-        this.clearInterval();
-      }
-    }, timeInMs);
+      this.intervalId = window.setInterval(() => {
+        let currentValue = this.timerValue.value;
+        if (currentValue > 0) {
+          this.timerValue.next(currentValue - 1000);
+        } else {
+          this.clearInterval();
+          this.timerEndObservable.next();
+        }
+      }, timeInMs);    });
   }
 
   stopTimer(): void {
     this.clearInterval();
+    if (this.backgroundTaskId) {
+      BackgroundTask['finish']({ taskId: this.backgroundTaskId });
+    }
   }
 
   reinitializeTimer(): void {

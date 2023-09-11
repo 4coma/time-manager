@@ -1,6 +1,9 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject, Observable } from "rxjs";
 
+import { Plugins } from '@capacitor/core';
+const { App, BackgroundTask, LocalNotifications } = Plugins;
+
 @Injectable({
   providedIn: 'root'
 })
@@ -8,7 +11,9 @@ export class ChronoService {
 
   private chronoValue = new BehaviorSubject<number>(0);
   private intervalId?: number;
-  private timeInMs: number = 1000; // Default interval time in ms
+  private timeInMs: number = 1000; 
+
+  private backgroundTaskId: any;
 
   constructor() { }
 
@@ -17,9 +22,12 @@ export class ChronoService {
   }
 
   startChronometer(timeInMs: number): void {
-    this.chronoValue.next(0);
-    this.timeInMs = timeInMs;
-    this.startInterval();
+    this.backgroundTaskId = BackgroundTask["beforeExit"](async () => {
+      this.chronoValue.next(0);
+      this.timeInMs = timeInMs;
+      this.startInterval();
+    });
+
   }
 
   restartChronometer(): void {
@@ -28,6 +36,9 @@ export class ChronoService {
 
   stopChronometer(): void {
     this.clearInterval();
+    if (this.backgroundTaskId) {
+      BackgroundTask["finish"]({ taskId: this.backgroundTaskId });
+    }
   }
 
   reinitializeChronometer(): void {
