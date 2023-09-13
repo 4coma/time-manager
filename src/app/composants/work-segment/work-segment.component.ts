@@ -26,16 +26,13 @@ export class WorkSegmentComponent  implements OnInit {
   selectedTags: Tag[] = [];
   workSegmentName: string = '';
 
-  startValidity: boolean = false;
-  stopValidity: boolean = false;
-  saveValidity: boolean = false;
-
   isTimeActive: boolean = false;
   wasSaved: boolean = false;
   wasStarted: boolean = false;
   wasStopped: boolean = false;
 
-  selectValidity: boolean = true;
+  centiSeconds: number = 0;
+  private centiSecondsIntervalId?: number;
 
   userSpecifiedTimerValue:number = 0;
 
@@ -81,7 +78,6 @@ export class WorkSegmentComponent  implements OnInit {
 
   selectOption(event: any) {
     this.selectedMode = event.detail.value;
-    this.checkValidities();
   }
 
   handleTimerEnd() {
@@ -92,30 +88,21 @@ export class WorkSegmentComponent  implements OnInit {
 
   handleStart() {  
     this.wasStarted = true;  
-    if(!this.stopValidity){
-      if(this.selectedMode === 'Chrono') {
-        this.chronoService.restartChronometer();        
-      } else if(this.selectedMode === 'Timer') {
-        this.timerService.initializeTimer(this.timeValue);
-        this.timerService.startTimer(1000);
-      } else {
-        console.log('Error : unknown mode');
-      }
-      this.checkValidities();
-    } else if (this.stopValidity){
-      if(this.selectedMode === 'Chrono') {
-        this.chronoService.startChronometer(1000);
-      } else if(this.selectedMode === 'Timer') {
-        this.timerService.initializeTimer(this.timeValue);
-        this.timerService.startTimer(1000);
-      } else {
-        console.log('Error : unknown mode');
-      }
-      this.checkValidities();
+    this.startCentiSecondsInterval();
+  
+    if(this.selectedMode === 'Chrono') {
+      this.chronoService.startChronometer();
+    } else if(this.selectedMode === 'Timer') {
+      this.timerService.initializeTimer(this.timeValue);
+      this.timerService.startTimer(this.userSpecifiedTimerValue);
+    } else {
+      console.log('Error : unknown mode');
     }
   }
   
   handleStop() {
+    this.stopCentiSecondsInterval();
+  
     if(this.selectedMode === 'Chrono') {
       this.chronoService.stopChronometer();
       this.wasStopped = true;
@@ -125,7 +112,25 @@ export class WorkSegmentComponent  implements OnInit {
     } else {
       console.log('Error : unknown mode');
     }
-    this.checkValidities();
+  }
+  
+  private startCentiSecondsInterval() {
+    this.stopCentiSecondsInterval(); 
+    this.centiSeconds = 0;
+    this.centiSecondsIntervalId = window.setInterval(() => {
+      if(this.selectedMode === 'Chrono') {
+        this.centiSeconds = (this.centiSeconds + 1) % 100;
+      } else if(this.selectedMode === 'Timer') {
+        this.centiSeconds = (this.centiSeconds - 1 + 100) % 100;
+      }
+    }, 10);
+  }
+
+  private stopCentiSecondsInterval() {
+    if (this.centiSecondsIntervalId !== undefined) {
+      window.clearInterval(this.centiSecondsIntervalId);
+      this.centiSecondsIntervalId = undefined;
+    }
   }
   
   async handleSave() {
@@ -168,39 +173,11 @@ export class WorkSegmentComponent  implements OnInit {
   handleInputBlur(value: string) {
     this.workSegmentName = value;
 
-    this.checkValidities();
   }
 
-  checkStartValidity() {
-    this.startValidity = !this.startValidity && (this.workSegmentName !== '' && 
-                         this.selectedMode !== undefined && 
-                         this.selectedTags.length > 0);
-  }
-
-  checkStopValidity() {
-    this.stopValidity = !this.stopValidity && (this.workSegmentName !== '' && 
-    this.selectedMode !== undefined && 
-    this.selectedTags.length > 0);
-  }
-
-  checkSaveValidity() {
-    this.saveValidity = this.timeValue > 0 && !this.stopValidity;
-  }
-
-  checkValidities(){
-    this.checkStartValidity();
-    this.checkStopValidity();
-    this.checkSaveValidity();
-    this.checkSelectValidity();    
-  }
-
-  checkSelectValidity() {
-    this.selectValidity = (!this.wasStarted && this.wasSaved) || 
-    (!this.wasStarted && !this.wasSaved);  }
 
   updateSelectedTags(tags: Tag[]) {
     this.selectedTags = tags;
-    this.checkStartValidity();    
   }
 
   reinitializeForm(){
@@ -219,7 +196,6 @@ export class WorkSegmentComponent  implements OnInit {
     this.selectedMode = 'Chrono';
     this.timeValue = 0;
     this.cdr.detectChanges();
-    this.checkValidities();
   }
 
   showToaster() {

@@ -5,12 +5,12 @@ import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@
   templateUrl: './time-value.component.html',
   styleUrls: ['./time-value.component.scss'],
 })
-export class TimeValueComponent  implements OnInit {
-
+export class TimeValueComponent implements OnInit {
   @Input()
   timeValue: number = 0;
-  
-  timerUserValue: number = 0;
+
+  @Input()
+  centiSeconds: number = 0;
 
   @Input()
   selectedMode: string = 'Chrono';
@@ -29,13 +29,13 @@ export class TimeValueComponent  implements OnInit {
 
   ngOnInit() {}
 
-  
-
   ngOnChanges(changes: SimpleChanges) {
     if (changes['timeValue']) {
-        this.timeValue = changes['timeValue'].currentValue;
+      this.timeValue = changes['timeValue'].currentValue;
+    }
+    if (changes['centiSeconds']) {
+      this.centiSeconds = changes['centiSeconds'].currentValue;
     }
   }
-
-
+  
 }

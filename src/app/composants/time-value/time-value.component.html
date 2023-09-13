@@ -1,13 +1,19 @@
 <div style="font-size: 48px; text-align: center;">
   <ng-container *ngIf="wasStarted || selectedMode == 'Chrono'; else timerMode">
-    {{ timeValue | timeFormat }}
+    {{ (timeValue | timeFormat)?.hours }}:{{ (timeValue | timeFormat)?.minutes }}:{{ (timeValue | timeFormat)?.seconds }}
+    <span style="font-size: 12px; color: gray;">
+      {{ centiSeconds | number:'2.0-0' }}
+    </span>
   </ng-container>
 
   <ng-template #timerMode>
     <input 
     type="text" 
-    [value]="timerUserValue | timeFormat" 
+    [value]="(timeValue | timeFormat)?.hours + ':' + (timeValue | timeFormat)?.minutes + ':' + (timeValue | timeFormat)?.seconds" 
     style="font-size: 48px; text-align: center; width: 100%;"
     (input)="onTimeValueChange($event)"/>
+    <span style="font-size: 12px; color: gray;">
+      {{ centiSeconds | number:'2.0-0' }}
+    </span>
   </ng-template>
 </div>

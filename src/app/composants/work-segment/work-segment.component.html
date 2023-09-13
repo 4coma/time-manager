@@ -9,17 +9,20 @@
 
     <ion-row class="time-type-selection">
       <ion-col>
-        <app-select [selectValidity]="selectValidity" [modes]="modes" [selectedMode]="selectedMode" (ionChange)="selectOption($event)"></app-select>
+        <app-select [modes]="modes" [selectedMode]="selectedMode" (ionChange)="selectOption($event)"></app-select>
       </ion-col>
     </ion-row>
 
     <ion-row class="time">
       <ion-col>
         <app-time-value 
-        (timeValueChange)="handleTimeValueChange($event)"
-        [wasStarted]="wasStarted"
         [timeValue]="timeValue" 
-        [selectedMode]="selectedMode"></app-time-value>
+        [centiSeconds]="centiSeconds" 
+        [selectedMode]="selectedMode" 
+        [wasStarted]="wasStarted"
+        (timeValueChange)="handleTimeValueChange($event)">
+      </app-time-value>
+      
       </ion-col>
     </ion-row>
 
@@ -28,9 +31,9 @@
     </ion-row>
 
     <ion-row class="buttons ion-align-items-center ion-justify-content-center">
-      <app-generic-button [buttonType]="'start'" (buttonClick)="handleStart()" [validity]="startValidity"></app-generic-button>
-      <app-generic-button [buttonType]="'stop'" (buttonClick)="handleStop()" [validity]="stopValidity"></app-generic-button>
-      <app-generic-button [buttonType]="'save'" (buttonClick)="handleSave()" [validity]="saveValidity"></app-generic-button>
+      <app-generic-button [buttonType]="'start'" (buttonClick)="handleStart()"></app-generic-button>
+      <app-generic-button [buttonType]="'stop'" (buttonClick)="handleStop()"></app-generic-button>
+      <app-generic-button [buttonType]="'save'" (buttonClick)="handleSave()"></app-generic-button>
     </ion-row>
 
     <ion-row class="tags-button buttons ion-align-items-center ion-justify-content-center">
