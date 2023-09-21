@@ -19,11 +19,9 @@ export class WorkSegmentService {
     private storage: Storage
   ) {
     this.storageService.o_storage.subscribe((storage) => {
-      console.log('storage ? : ', storage);
       
       if(storage){
         this.storageReady = true;
-        console.log('storage ready');
         
         this.loadInitialData();
       }
@@ -32,9 +30,7 @@ export class WorkSegmentService {
 
   private async loadInitialData() {
     try {
-      const dataFromDb = await this.getWorkSegments();
-      console.log('loading data : ', dataFromDb);
-      
+      const dataFromDb = await this.getWorkSegments();      
       this.$workSegments.next(dataFromDb);
     } catch (error) {
       console.error('Error loading initial data:', error);

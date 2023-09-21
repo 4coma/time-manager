@@ -1,8 +1,9 @@
 <ion-item>
   <ion-input 
-  [(ngModel)]="workSegmentName"
-  label="Titre" 
-  type="text" 
-  placeholder="Ajouter un titre" 
-  (ionBlur)="handleBlur($event)"></ion-input>
+    [ngStyle]="{'font-size': '12px'}"
+    [(ngModel)]="workSegmentName"
+    type="text" 
+    placeholder="Ajouter un titre" 
+    (ionBlur)="handleBlur($event)">
+  </ion-input>
 </ion-item>

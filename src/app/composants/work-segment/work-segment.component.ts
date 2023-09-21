@@ -70,15 +70,18 @@ export class WorkSegmentComponent  implements OnInit {
     this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
+  // adds a new work segment to the workSegments list
+  addWS(){
+    this.workSegments.push({} as WorkSegment);
+  }
+
   handleTimeValueChange(newValue: string) {
     this.timeValue = this.timerService.convertInputFieldValueToMS(newValue);
     this.userSpecifiedTimerValue = this.timerService.convertInputFieldValueToMS(newValue);
     
   }
 
-  selectOption(event: any) {
-    this.selectedMode = event.detail.value;
-  }
+
 
   handleTimerEnd() {
     // your logic when the timer reaches zero, for example:
@@ -170,15 +173,9 @@ export class WorkSegmentComponent  implements OnInit {
     
   }
 
-  handleInputBlur(value: string) {
-    this.workSegmentName = value;
-
-  }
 
 
-  updateSelectedTags(tags: Tag[]) {
-    this.selectedTags = tags;
-  }
+
 
   reinitializeForm(){
     if(this.selectedMode === 'Chrono'){

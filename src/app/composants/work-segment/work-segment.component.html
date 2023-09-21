@@ -1,43 +1,32 @@
 <ion-card class="full-height-card">
   <ion-grid class="full-height-grid">
+<!--! NEXT : faire en sorte que l'input pour l'ajout de tags soit général et soit placé tout en bas
+de l'écran; que les tags s'ajoutent au ws "actif" càd actuellement sélectionné - il doit donc
+y avoir un fond différent quand c'est le cas; les tags doivent s'ajouter au bas de chaque ws sous
+la forme de chips-->
+    <ion-grid>
+      <ion-row class="time" style="display: flex; flex-direction: column">
+        <div class="action-buttons">
+          <ion-icon size="large" name="play-outline" (buttonClick)="handleStart()"></ion-icon>
+          <ion-icon size="large" name="stop-outline" (buttonClick)="handleStop()"></ion-icon>
+        </div>
+          <app-time-value 
+          [timeValue]="timeValue" 
+          [centiSeconds]="centiSeconds" 
+          [selectedMode]="selectedMode" 
+          [wasStarted]="wasStarted"
+          (timeValueChange)="handleTimeValueChange($event)">
+          </app-time-value>
+      </ion-row>
+      <!-- ngFor sur rows ajoutés par l'user -->
+      <ion-row *ngFor="let row of workSegments">
+        <app-work-segment-row [wsRow]="row" style="display: flex; align-items: center;"></app-work-segment-row>
+      </ion-row>
+      <ion-row>
+        <div class="add-row" (click)="addWS()"> Add row </div>
 
-    <ion-row class="work-segment-name">
-      <ion-col>
-        <app-work-segment-name [workSegmentName]="workSegmentName" (inputBlur)="handleInputBlur($event)"></app-work-segment-name>
-      </ion-col>
-    </ion-row>
+      </ion-row>
+    </ion-grid>
 
-    <ion-row class="time-type-selection">
-      <ion-col>
-        <app-select [modes]="modes" [selectedMode]="selectedMode" (ionChange)="selectOption($event)"></app-select>
-      </ion-col>
-    </ion-row>
-
-    <ion-row class="time">
-      <ion-col>
-        <app-time-value 
-        [timeValue]="timeValue" 
-        [centiSeconds]="centiSeconds" 
-        [selectedMode]="selectedMode" 
-        [wasStarted]="wasStarted"
-        (timeValueChange)="handleTimeValueChange($event)">
-      </app-time-value>
-      
-      </ion-col>
-    </ion-row>
-
-    <ion-row class="tags">
-      <app-tags [selectedTags]="selectedTags" [tags]="tags" (tagsUpdated)="updateSelectedTags($event)"></app-tags>
-    </ion-row>
-
-    <ion-row class="buttons ion-align-items-center ion-justify-content-center">
-      <app-generic-button [buttonType]="'start'" (buttonClick)="handleStart()"></app-generic-button>
-      <app-generic-button [buttonType]="'stop'" (buttonClick)="handleStop()"></app-generic-button>
-      <app-generic-button [buttonType]="'save'" (buttonClick)="handleSave()"></app-generic-button>
-    </ion-row>
-
-    <ion-row class="tags-button buttons ion-align-items-center ion-justify-content-center">
-      <ion-icon (click)="displayWorkSegmentList()" size="large" name="pricetags-outline"></ion-icon>
-    </ion-row>
   </ion-grid>
 </ion-card>

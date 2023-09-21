@@ -12,6 +12,8 @@ import { TimeValueComponent } from '../time-value/time-value.component';
 import { TagsComponent } from '../tags/tags.component';
 import { WorkSegmentNameComponent } from '../work-segment-name/work-segment-name.component';
 import { WorkSegmentListComponent } from '../work-segment-list/work-segment-list.component';
+import { WorkSegmentRowComponent } from '../work-segment-row/work-segment-row.component';
+import { SelectModeComponent } from '../select-mode/select-mode.component';
 
 @NgModule({
   imports: [
@@ -28,7 +30,9 @@ import { WorkSegmentListComponent } from '../work-segment-list/work-segment-list
     TimeValueComponent,
     TagsComponent,
     WorkSegmentNameComponent,
-    WorkSegmentListComponent
+    WorkSegmentListComponent,
+    WorkSegmentRowComponent,
+    SelectModeComponent
   ]
 })
 export class FolderPageModule {}

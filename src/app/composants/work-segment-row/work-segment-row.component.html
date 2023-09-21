@@ -1,0 +1,33 @@
+<div style="display: flex;flex-direction:column"> 
+  <div class="line-1" style="display: flex; flex-direction: row; align-items: center; justify-content: space-between; width: 90vw">
+    <div class="ws-counter-type"> 
+      <!-- timer or chrono icons; one click on the one hides the other and sets selectedMode -->
+    <app-select-mode [selectedMode]="selectedMode" (selectMode)="selectModeEvent($event)"></app-select-mode>
+    </div>
+    <div class="ws-name"> 
+      <app-work-segment-name [workSegmentName]="workSegmentName" (inputBlur)="handleInputBlur($event)"></app-work-segment-name>
+    </div>
+    
+    <div class="ws-time-objective">
+      <!-- un simple texte qui quand on le tap ouvre un dialog avec un form number qui permet de fixer l'objectif de durée du ws -->
+      <span> 1h </span>
+    </div>
+    <div class="ws-eslapsed-time">
+      <!-- il s'agit d'un simple mirror de la valeur du composant time-value  -->
+      <span> 00:00:00</span>
+    </div>
+    <div class="ws-objective">
+      <!-- en fait cette colonne n'existera pas mais je la laisse en guide de note : lorsqu'un elapsed time dépasse son objectif
+      fixé en temps alors c'est la couleur de toute la ligne qui change  -->
+      <ion-icon name="checkmark-outline"></ion-icon>
+    </div>
+  </div>
+
+  <div class="line-2">
+    <div class="ws-labels">
+      <!-- reprendre composant existant chips + fiter + add/delete -->
+      <app-tags [selectedTags]="selectedTags" [tags]="tags" (tagsUpdated)="updateSelectedTags($event)"></app-tags>
+    </div>
+  </div>
+  
+</div>

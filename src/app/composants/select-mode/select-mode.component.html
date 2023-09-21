@@ -1,0 +1,11 @@
+<div class="select-mode-with-icon">
+  <ion-icon 
+  *ngIf="selectedMode === 'Chrono'"
+  name="hourglass-outline"
+  (click)="switchModeSelection('Timer')"></ion-icon>
+  <ion-icon 
+  *ngIf="selectedMode !== 'Chrono'"
+  name="stopwatch-outline"
+  (click)="switchModeSelection('Chrono')"
+  ></ion-icon>
+</div>
