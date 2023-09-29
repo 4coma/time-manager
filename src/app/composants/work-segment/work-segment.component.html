@@ -1,30 +1,57 @@
 <ion-card class="full-height-card">
   <ion-grid class="full-height-grid">
-<!--! NEXT : faire en sorte que l'input pour l'ajout de tags soit général et soit placé tout en bas
-de l'écran; que les tags s'ajoutent au ws "actif" càd actuellement sélectionné - il doit donc
-y avoir un fond différent quand c'est le cas; les tags doivent s'ajouter au bas de chaque ws sous
-la forme de chips-->
     <ion-grid>
       <ion-row class="time" style="display: flex; flex-direction: column">
         <div class="action-buttons">
-          <ion-icon size="large" name="play-outline" (buttonClick)="handleStart()"></ion-icon>
-          <ion-icon size="large" name="stop-outline" (buttonClick)="handleStop()"></ion-icon>
+          <ion-icon 
+          *ngIf="activeRowIndex !== null && !isTimeActive"
+          size="large" name="play-outline" (click)="handleStart()" stopEvent></ion-icon>
+          <ion-icon 
+          *ngIf="isTimeActive"
+          size="large" name="pause-outline" (click)="handlePause()"></ion-icon>
+          <ion-icon 
+          *ngIf="activeRowIndex !== null" 
+          size="large" name="stop-outline" (click)="handleStop()"></ion-icon>
         </div>
           <app-time-value 
           [timeValue]="timeValue" 
           [centiSeconds]="centiSeconds" 
           [selectedMode]="selectedMode" 
           [wasStarted]="wasStarted"
+          [mainFontSize]="'60px'" 
+          [secondaryFontSize]="'15px'"
           (timeValueChange)="handleTimeValueChange($event)">
           </app-time-value>
       </ion-row>
       <!-- ngFor sur rows ajoutés par l'user -->
-      <ion-row *ngFor="let row of workSegments">
-        <app-work-segment-row [wsRow]="row" style="display: flex; align-items: center;"></app-work-segment-row>
+      <ion-row 
+      *ngFor="let row of workSegments; let i = index"
+      (click)="handleWSSelection(i)"
+      [ngClass]="{'active-row': i === activeRowIndex}"
+      style="margin-top: 3%">
+        <app-work-segment-row 
+        [wsRow]="row" 
+        [tags]="tags"
+        [timeValue]="timeValue"
+        [index]="i"
+        [activeRowIndex]="activeRowIndex"
+        (nameChanged)="newWSName($event)" 
+        (removeWSEvent)="removeWS($event)"
+        (removeTagEvent)="removeTag($event)"
+        (modeChanged)="updateWSMode($event)"
+        style="display: flex; align-items: center;"></app-work-segment-row>
       </ion-row>
-      <ion-row>
+      <ion-row style="margin-top: 3%">
         <div class="add-row" (click)="addWS()"> Add row </div>
+      </ion-row>
 
+      <ion-row>
+        <app-tags 
+        *ngIf="workSegments.length > 0 && activeRowIndex !== null"
+        [tags]="tags"
+        [selectedTagsForActiveWS]="selectedTagsForActiveWS"
+        (tagsUpdated)="updateSelectedTagsForWS($event)"
+        (tagCreation)="createNewTagAndAddItToWS($event)"></app-tags>
       </ion-row>
     </ion-grid>
 

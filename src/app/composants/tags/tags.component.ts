@@ -18,22 +18,25 @@ export class TagsComponent  implements OnInit {
   @Input()
   tags: Tag[] = [];
   filteredTags: Tag[] = [];
+
   @Input()
-  selectedTags: Tag[] = [];
+  selectedTagsForActiveWS: Tag[] = [];
 
   @Output() tagsUpdated = new EventEmitter<Tag[]>();
+
+  @Output() tagCreation = new EventEmitter<Tag>();
 
 
   constructor() { }
 
   ngOnInit() {}
 
-  filterTags() {
-    if (this.currentTag && this.currentTag.label) {
-      const query = this.currentTag.label.toLowerCase();
+  filterTags() {    
+    if (this.newTag !== '') {
+      const query = this.newTag.toLowerCase();
       this.filteredTags = this.tags.filter(tag => 
         tag.label.toLowerCase().startsWith(query) &&
-        !this.selectedTags.some(selectedTag => selectedTag.id === tag.id) // Exclude tags that are already in the selected tags
+        !this.selectedTagsForActiveWS.some(selectedTag => selectedTag.id === tag.id) // Exclude tags that are already in the selected tags
       );
     } else {
       this.filteredTags = [];
@@ -41,31 +44,34 @@ export class TagsComponent  implements OnInit {
   }
 
   selectTag(tag: Tag) {
-    if(this.selectedTags.filter(t => t.id === tag.id).length === 0) {
-      this.selectedTags.push(tag);
-      this.currentTag = {} as Tag;
+    if(this.selectedTagsForActiveWS.filter(t => t.id === tag.id).length === 0) {
+      this.selectedTagsForActiveWS.push(tag);
       this.filteredTags = [];
+      this.tagsUpdated.emit(this.selectedTagsForActiveWS);
+      this.newTag = '';
     }
 
   }
 
-  addTag() {    
+  createNewTag() { 
+       
     if (this.newTag.trim() !== '') {
       this.currentTag = {
         id: 0,
         label: this.newTag
       }
-      this.selectedTags.push(this.currentTag);
-      this.filteredTags = [];
+      
+      this.tagCreation.emit(this.currentTag);
+      this.selectTag(this.currentTag);
+
       this.newTag = '';
     }
-    this.tagsUpdated.emit(this.selectedTags);
   }
 
   removeTag(tag: Tag) {
-    const index = this.selectedTags.indexOf(tag);
+    const index = this.selectedTagsForActiveWS.indexOf(tag);
     if (index > -1) {
-      this.selectedTags.splice(index, 1);
+      this.selectedTagsForActiveWS.splice(index, 1);
     }
   }
 
@@ -74,8 +80,8 @@ export class TagsComponent  implements OnInit {
  }
 
  ngOnChanges(changes: SimpleChanges) {
-  if (changes['selectedTags']) {
-      this.selectedTags = changes['selectedTags'].currentValue;
+  if (changes['selectedTagsForActiveWS']) {
+      this.selectedTagsForActiveWS = changes['selectedTagsForActiveWS'].currentValue;
   }
 }
 

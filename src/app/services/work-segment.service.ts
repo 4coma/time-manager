@@ -21,12 +21,18 @@ export class WorkSegmentService {
     this.storageService.o_storage.subscribe((storage) => {
       
       if(storage){
+
+        //this.clearAllData();
         this.storageReady = true;
         
         this.loadInitialData();
       }
     })
   }
+
+  async clearAllData() {
+    await this.storage.clear();
+}
 
   private async loadInitialData() {
     try {
@@ -37,13 +43,16 @@ export class WorkSegmentService {
     }
   }
 
-  async newWorkSegment(workSegment: WorkSegment) {
+  async newWorkSegment(workSegment: Partial<WorkSegment>) {
     if (this.storageReady) {
       const workSegments = await this.storage.get('workSegments') || [];
       const maxId = workSegments.reduce((max: number, ws: WorkSegment) => Math.max(max, ws.id || 0), 0);
       workSegment.id = maxId + 1;
+      workSegment.duration = 0;
       workSegments.push(workSegment);
       await this.storage.set('workSegments', workSegments);
+      console.log('newWorkSegment', workSegment);
+      
       this.$workSegments.next(workSegments);
     } else {
       throw new Error('Storage not initialized');
@@ -69,6 +78,8 @@ export class WorkSegmentService {
         workSegments[index] = workSegment;
         await this.storage.set('workSegments', workSegments);
         this.$workSegments.next(workSegments);
+        console.log('work segments après index : ', workSegments);
+        
       } else {
         throw new Error('WorkSegment not found');
       }

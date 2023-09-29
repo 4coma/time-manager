@@ -4,7 +4,7 @@
       <strong>Label :</strong> {{ workSegment.label }}
     </div>
     <div>
-      <strong>Date :</strong> {{ workSegment.date | date:'dd/MM/yyyy' }}
+      <strong>Date :</strong> {{ workSegment.endedAt | date:'dd/MM/yyyy' }}
     </div>
     <div>
       <strong>Durée :</strong> {{ workSegment.duration | timeFormat }}

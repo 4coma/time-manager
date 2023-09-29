@@ -8,16 +8,19 @@ import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@
 export class SelectModeComponent  implements OnInit {
 
   @Input()
-  selectedMode: string = 'Chrono';
+  selectedMode: string = '';
 
   @Output() selectMode = new EventEmitter<string>();
   
 
   constructor() { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    
+  }
 
 switchModeSelection(selectedMode: string){
+  
   this.selectMode.emit(selectedMode);
 }
 

@@ -10,7 +10,6 @@ import { SelectComponent } from '../select/select.component';
 import { TimeFormatPipe } from 'src/app/pipes/time-format.pipe';
 import { TimeValueComponent } from '../time-value/time-value.component';
 import { TagsComponent } from '../tags/tags.component';
-import { WorkSegmentNameComponent } from '../work-segment-name/work-segment-name.component';
 import { WorkSegmentListComponent } from '../work-segment-list/work-segment-list.component';
 import { WorkSegmentRowComponent } from '../work-segment-row/work-segment-row.component';
 import { SelectModeComponent } from '../select-mode/select-mode.component';
@@ -29,7 +28,6 @@ import { SelectModeComponent } from '../select-mode/select-mode.component';
     TimeFormatPipe,
     TimeValueComponent,
     TagsComponent,
-    WorkSegmentNameComponent,
     WorkSegmentListComponent,
     WorkSegmentRowComponent,
     SelectModeComponent

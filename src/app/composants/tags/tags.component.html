@@ -9,16 +9,10 @@
       </ion-list>
     </ion-col>
     <ion-col size="2" size-md="4" class="ion-text-center">
-      <ion-button [disabled]="isTagEmpty" size="small" color="light" (click)="addTag()">
+      <ion-button [disabled]="isTagEmpty" size="small" color="light" (click)="createNewTag()">
         <ion-icon name="add-outline"></ion-icon>
       </ion-button>
-      
     </ion-col>
   </ion-row>
-  <ion-row class="selected-tags">
-    <ion-chip *ngFor="let tag of selectedTags">
-      <ion-label>{{tag.label}}</ion-label>
-      <ion-icon name="close-circle" (click)="removeTag(tag)"></ion-icon>
-    </ion-chip>
-  </ion-row>
+
 </ion-grid>

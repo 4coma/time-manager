@@ -21,16 +21,23 @@ export class TagService {
   ) {
     this.storageService.o_storage.subscribe((storage) => {
       if(storage){
+        //this.clearAllData();
         this.storageReady = true;
         this.loadInitialData();
       }
     })
   }
 
+  async clearAllData() {
+    await this.storage.clear();
+}
+
+
   private async loadInitialData() {
     try {
       const dataFromDb = await this.getTags();
       this.$tags.next(dataFromDb);
+      
     } catch (error) {
       console.error('Error loading initial data:', error);
     }
@@ -42,13 +49,19 @@ export class TagService {
   }
 
   async newTag(tag: Tag): Promise<Tag>{
+    console.log('are we in tag service ? ', tag);
+    
     if (this.storageReady) {
       const tags = await this.storage.get('tags') || [];
       const maxId = tags.reduce((max: number, t: Tag) => Math.max(max, t.id || 0), 0);
       tag.id = maxId + 1;
       tags.push(tag);
+      console.log('tags avant set sur la db : ', tags);
+      
       await this.storage.set('tags', tags);
       this.$tags.next(tags);
+      console.log('new created tag : ', tag);
+      
       return tag;
     } else {
       throw new Error('Storage not initialized');

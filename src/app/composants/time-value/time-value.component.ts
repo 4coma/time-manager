@@ -21,17 +21,25 @@ export class TimeValueComponent implements OnInit {
   @Output() timeValueChange = new EventEmitter<string>();
   userSpecifiedValue: number = 0; 
 
+  @Input() mainFontSize: string = '48px';
+  @Input() secondaryFontSize: string = '12px';
+
   onTimeValueChange(newValue: any) {    
     this.timeValueChange.emit(newValue.target.value);
   }
 
   constructor() { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    console.log('timeValue onInit : ', this.timeValue);
+    
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['timeValue']) {
       this.timeValue = changes['timeValue'].currentValue;
+      console.log('timeValue onChanges : ', this.timeValue);
+      
     }
     if (changes['centiSeconds']) {
       this.centiSeconds = changes['centiSeconds'].currentValue;

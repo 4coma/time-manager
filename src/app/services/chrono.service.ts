@@ -18,12 +18,18 @@ export class ChronoService {
     return this.chronoValue.asObservable();
   }
 
-  startChronometer(): void {
+  startChronometer(wsDuration?: number): void {
     if (!this.startTime) {
-      this.startTime = new Date().getTime() - this.elapsedTime;
+        if(wsDuration && this.elapsedTime === 0) { // Check if elapsedTime is 0 before setting it from wsDuration
+            this.elapsedTime = wsDuration;        
+        } 
+        this.startTime = new Date().getTime() - this.elapsedTime;
+    } else {
+        this.startTime = new Date().getTime() - this.elapsedTime;
     }
     this.startInterval();
-  }
+}
+
 
   restartChronometer(): void {
     if (this.startTime !== undefined) {
@@ -38,6 +44,7 @@ export class ChronoService {
       this.elapsedTime = new Date().getTime() - this.startTime;
       this.startTime = undefined;
     }
+    console.log('stopChronometer - startTime:', this.startTime, 'elapsedTime:', this.elapsedTime);
   }
 
   reinitializeChronometer(): void {
@@ -63,4 +70,9 @@ export class ChronoService {
       this.intervalId = undefined;
     }
   }
+
+  setElapsedTime(time: number): void {
+    this.elapsedTime = time;
+}
+
 }
